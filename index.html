@@ -346,19 +346,12 @@ particlesJS("prueba", {
   ;
     
   function getIP() {
-    // let promise = appwrite.functions.createExecution('611c7e287088a');
+    let promise = appwrite.functions.createExecution('611c7e287088a');
 
-    // promise.then(function (response) {
-    //     console.log(resp);
-    // }, function (error) {
-    //   console.log(error);
-    // });
-    appwrite
-    .account.create('me@example.com', 'password', 'Jane Doe')
-        .then(response => {
-            console.log(response);
-        }, error => {
-            console.log(error);
-        });
+    promise.then(function (response) {
+        console.log(resp);
+    }, function (error) {
+      console.log(error);
+    });
   }
 </script>
