@@ -17,7 +17,7 @@
         <div id="navbar">
           <a onclick="scrollToId('header')" class="font-medium active text-xs sm:text-xs md:text-lg pb-1 px-2 sm:px-3 tab font-vietnam no-underline text-grey-darkest hover:text-blue-dark hover:bg-gray-500  rounded-lg">Home</a>
           <a onclick="scrollToId('servicios')" class="font-medium text-xs sm:text-xs md:text-lg pb-1 px-2 sm:px-3 tab font-vietnam no-underline text-grey-darkest hover:text-blue-dark hover:bg-gray-500  rounded-lg ml-2">Services</a>
-          <a onclick="scrollToId('experience')" class="font-medium text-xs sm:text-xs md:text-lg pb-1 px-2 sm:px-3 tab font-vietnam no-underline text-grey-darkest hover:text-blue-dark hover:bg-gray-500  rounded-xs ml-2">Experience</a>
+          <a onclick="scrollToId('experience')" class="font-medium text-xs sm:text-xs md:text-lg pb-1 px-2 sm:px-3 tab font-vietnam no-underline text-grey-darkest hover:text-blue-dark hover:bg-gray-500  rounded-lg ml-2">Experience</a>
           <a onclick="scrollToId('contacto')" class="font-medium text-xs sm:text-xs md:text-lg pb-1 px-2 sm:px-3 tab font-vietnam no-underline text-grey-darkest hover:text-blue-dark hover:bg-gray-500  rounded-lg ml-2">Contact</a>
         </div>
       </nav>
@@ -142,7 +142,10 @@
               <textarea rows="4" cols="50" placeholder="Cuentame tu idea!" class="mt-1 pl-2 pt-2 block w-full border-none bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0"></textarea>
             </div>
         </div>
-        <button type="button" onclick="getIP()">send email</button>
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-gray-900 shadow-md font-semibold hover:bg-gray-800 text-yellow-400 text-sm px-2 py-1  rounded-md" onclick="getIP()">Send Email</button>
+        </div>
+        
       </form>
     </div>
   </div>
@@ -346,26 +349,27 @@ particlesJS("prueba", {
     
   function getIP() {
 
-    // let promiseAnonUser = appwrite.account.createAnonymousSession();
-
-
     let promise = appwrite.functions.createExecution('611c7e287088a');
 
-    // promiseAnonUser.then(function (response) {
-    //   console.log('RESPONSE USER', response); // Success
-    //   promise.then(function (response) {
-    //       console.log('RESPONSE FUNCTION',resp);
-    //   }, function (error) {
-    //     console.log('ERROR FUNCTION',error);
-    //   });
-    // }, function (error) {
-    //     console.log('ERROR USER',error); // Failure
-    // });
-
-      promise.then(function (response) {
-          console.log('RESPONSE FUNCTION',response);
-      }, function (error) {
-        console.log('ERROR FUNCTION',error);
-      });
+    promise.then(function (response) {
+        console.log('RESPONSE FUNCTION',response);
+    }, function (error) {
+      console.log('ERROR FUNCTION',error);
+    });
   }
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+    let getSession = localStorage.getItem('cookieFallback');
+    if(!getSession){
+      let promiseAnonUser = appwrite.account.createAnonymousSession();
+      promiseAnonUser.then(function (response) {
+        // console.log('RESPONSE USER', response); // Success
+      }, function (error) {
+          console.log('[ERROR] - PROBLEM CREATING USER',error); // Failure
+      });
+    }
+    else{
+      console.log('[USER] - USER EXISTS');
+    }
+  });
 </script>
