@@ -336,22 +336,36 @@ particlesJS("prueba", {
 
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/appwrite@4.0.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/appwrite@5.0.0"></script>
 <script>
   const appwrite = new Appwrite();
 
   appwrite
       .setEndpoint('http://localhost/v1') // Your Appwrite Endpoint
-      .setProject('611c7dee87532') // Your project ID
-  ;
+      .setProject('611c7dee87532'); // Your project ID
     
   function getIP() {
+
+    // let promiseAnonUser = appwrite.account.createAnonymousSession();
+
+
     let promise = appwrite.functions.createExecution('611c7e287088a');
 
-    promise.then(function (response) {
-        console.log(resp);
-    }, function (error) {
-      console.log(error);
-    });
+    // promiseAnonUser.then(function (response) {
+    //   console.log('RESPONSE USER', response); // Success
+    //   promise.then(function (response) {
+    //       console.log('RESPONSE FUNCTION',resp);
+    //   }, function (error) {
+    //     console.log('ERROR FUNCTION',error);
+    //   });
+    // }, function (error) {
+    //     console.log('ERROR USER',error); // Failure
+    // });
+
+      promise.then(function (response) {
+          console.log('RESPONSE FUNCTION',response);
+      }, function (error) {
+        console.log('ERROR FUNCTION',error);
+      });
   }
 </script>
