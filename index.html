@@ -133,17 +133,17 @@
       <form method="#" action="#" class="mt-10 w-9/12 sm:w-6/12 md:3/12">
         <div class="flex flex-col text-white" data-aos="fade-left" data-aos-offset="300" data-aos-easing="ease-in-sine">
             <div>
-              <input type="text" placeholder="Nombres" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600  focus:ring-0">
+              <input type="text" id="namesUserEmail" placeholder="Nombres" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600  focus:ring-0">
             </div>
             <div class="mt-7">                
-              <input type="email" placeholder="Correo electronico" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0">                           
+              <input type="email" id="emailFrom" placeholder="Correo electronico" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0">                           
             </div>
             <div class="mt-7">
-              <textarea rows="4" cols="50" placeholder="Cuentame tu idea!" class="mt-1 pl-2 pt-2 block w-full border-none bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0"></textarea>
+              <textarea rows="4" id="textEmail"cols="50" placeholder="Cuentame tu idea!" class="mt-1 pl-2 pt-2 block w-full border-none bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0"></textarea>
             </div>
         </div>
         <div class="flex justify-end mt-4">
-          <button type="button" class="bg-gray-900 shadow-md font-semibold hover:bg-gray-800 text-yellow-400 text-sm px-2 py-1  rounded-md" onclick="getIP()">Send Email</button>
+          <button type="button" class="bg-yellow-400 shadow-md w-40 font-semibold hover:bg-yellow-300 text-gray-900 text-sm px-2 py-2  rounded-md" onclick="getIP()">Send Email</button>
         </div>
         
       </form>
@@ -349,7 +349,10 @@ particlesJS("prueba", {
     
   function getIP() {
 
-    let promise = appwrite.functions.createExecution('611c7e287088a');
+    let name = document.querySelector('#namesUserEmail').value
+    let email = document.querySelector('#emailFrom').value
+    let text = document.querySelector('#textEmail').value
+    let promise = appwrite.functions.createExecution('611c7e287088a', JSON.stringify({name, email, text}));
 
     promise.then(function (response) {
         console.log('RESPONSE FUNCTION',response);
