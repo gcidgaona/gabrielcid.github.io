@@ -22,8 +22,8 @@
         </div>
       </nav>
     </div>
-    <div id="prueba" class="relative bg-home min-h-screen">
-      <div class="grid grid-rows-2 md:grid-cols-2 lg:grid-cols-2 px-5 sm:px-24 md:px-24 lg:px-24 xl:px-24 min-h-screen scrollNav absolute w-full" id="header">
+    <div id="prueba" class="relative bg-home min-h-screen flex justify-center">
+      <div class="grid grid-rows-2 md:grid-cols-2 lg:grid-cols-2 px-5 sm:px-24 md:px-24 lg:px-24 xl:px-24 min-h-screen scrollNav absolute w-9/12" id="header">
         <div class="flex flex-col justify-end sm:justify-center md:justify-center md:min-h-screen ">
           <h1 class="text-5xl sm:text-7xl md:text-7xl lg:text-8xl uppercase font-poppins font-extrabold" style="color: #2E86AB">Hola,</h1>
           <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-8xl  font-poppins font-bold text-yellow-400"><span style="color: #8B1E3F">soy </span>Gabriel</h1>
@@ -75,7 +75,7 @@
       </div>
     </div>
   </div>
-  <div class="container mx-auto scrollNav flex flex-col items-start md:flex-row my-12 md:my-24" id="experience">
+  <div class="container mx-auto scrollNav flex flex-col w-9/12 items-start md:flex-row my-12 md:my-24" id="experience">
     <div class="flex flex-col w-full sticky md:top-64 lg:w-1/3 mt-2 md:mt-12 px-8">
       <p class="text-2xl md:text-3xl font-poppins uppercase font-semibold leading-normal md:leading-relaxed mb-2 text-yellow-400">Experiencia Laboral</p>
       <p class="text-sm md:text-base font-vietnam font-light text-gray-50 mb-4">
@@ -130,20 +130,29 @@
       <h1 class="text-base sm:text-lg font-vietnam">¡Escribe tu idea y me contactaré contigo!</h1>
     </div>
     <div class="flex items-center justify-center ">
-      <form method="#" action="#" class="mt-10 w-9/12 sm:w-6/12 md:3/12">
+      <form method="post" action="javascript:sendEmail()" id="contactForm" class="mt-10 w-9/12 sm:w-6/12 md:3/12">
         <div class="flex flex-col text-white" data-aos="fade-left" data-aos-offset="300" data-aos-easing="ease-in-sine">
-            <div>
-              <input type="text" id="namesUserEmail" placeholder="Nombres" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600  focus:ring-0">
+            <div class="mb-2">
+              <input required type="text" id="namesUserEmail" placeholder="Nombres" class="pl-3  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600  focus:ring-0">
+              <div class="h-6 ">
+                <p class="errorMessage" id="errorName"></p>
+              </div>
             </div>
-            <div class="mt-7">                
-              <input type="email" id="emailFrom" placeholder="Correo electronico" class="mt-1 pl-2  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0">                           
+            <div class="mb-2">                
+              <input required type="email" id="emailFrom" placeholder="Correo electronico" class="pl-3  block w-full border-none bg-gray-700 h-11 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0">                           
+              <div class="h-6 ">
+                <p class="errorMessage" id="errorEmail"></p>
+              </div>
             </div>
-            <div class="mt-7">
-              <textarea rows="4" id="textEmail"cols="50" placeholder="Cuentame tu idea!" class="mt-1 pl-2 pt-2 block w-full border-none bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0"></textarea>
+            <div class="">
+              <textarea required rows="4" id="textEmail"cols="50" placeholder="Cuentame tu idea!" class=" pl-3 pt-2 block w-full border-none bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 focus:ring-0"></textarea>
+              <div class="h-6 ">
+                <p class="errorMessage" id="errorText"></p>
+              </div>
             </div>
         </div>
-        <div class="flex justify-end mt-4">
-          <button type="button" class="bg-yellow-400 shadow-md w-40 font-semibold hover:bg-yellow-300 text-gray-900 text-sm px-2 py-2  rounded-md" onclick="getIP()">Send Email</button>
+        <div class="flex justify-end mt-2">
+          <button type="button" id="sendContactForm" class="bg-yellow-400 shadow-md w-40 font-semibold hover:bg-yellow-300 text-gray-900 text-sm px-2 py-2  rounded-md">Send Email</button>
         </div>
         
       </form>
@@ -154,7 +163,7 @@
 </html>
 
 <style>
-  .bg-home{
+  .bg-hom flexe{
     background: linear-gradient(0deg, rgba(15,23,42,1) 0%, rgba(4,6,11,1) 100%);
   }
   .bg-main{
@@ -346,19 +355,64 @@ particlesJS("prueba", {
   appwrite
       .setEndpoint('http://localhost/v1') // Your Appwrite Endpoint
       .setProject('611c7dee87532'); // Your project ID
-    
-  function getIP() {
+  
+  let myform = document.getElementById("contactForm");
+  document.getElementById("sendContactForm").addEventListener("click", function () {
+    myform.submit();  
+  });
 
+  function validateForm(){
     let name = document.querySelector('#namesUserEmail').value
     let email = document.querySelector('#emailFrom').value
     let text = document.querySelector('#textEmail').value
-    let promise = appwrite.functions.createExecution('611c7e287088a', JSON.stringify({name, email, text}));
+    
+    const validateEmail = () => {
+      if(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
+        return true
+      }else{
+        return false
+      }
+    }
+    let result = true
+    let isEmailValid = validateEmail()
+    // If x is Not a Number or less than one or greater than 10
+    let textError;
+    if (name === '') {
+      textError = "Debes ingresar tu nombre!";
+      result = false
+      document.getElementById("errorName").innerHTML = textError;
+    }else{
+      document.getElementById("errorName").innerHTML = '';
+    }
+    if (email === '' || !isEmailValid) {
+      textError = "Debes ingresar un email valido.";
+      result = false
+      document.getElementById("errorEmail").innerHTML = textError;
+    } else{
+      document.getElementById("errorEmail").innerHTML = '';
+    }
+    if (text === '') {
+      textError = "Debes enviarme tu idea!";
+      result = false
+      document.getElementById("errorText").innerHTML = textError;
+    } else{
+      document.getElementById("errorText").innerHTML = '';
+    }
 
-    promise.then(function (response) {
-        console.log('RESPONSE FUNCTION',response);
-    }, function (error) {
-      console.log('ERROR FUNCTION',error);
-    });
+    return result
+  }
+
+  function getIP() {
+
+    let result = validateForm()
+
+    // let promise = appwrite.functions.createExecution('611c7e287088a', JSON.stringify({name, email, text}));
+
+    // promise.then(function (response) {
+    //     console.log('RESPONSE FUNCTION',response);
+    // }, function (error) {
+    //   console.log('ERROR FUNCTION',error);
+    // });
   }
 
   document.addEventListener("DOMContentLoaded", function(event) {
@@ -375,4 +429,21 @@ particlesJS("prueba", {
       console.log('[USER] - USER EXISTS');
     }
   });
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function() {
+  emailjs.init("Hu6Br5_kt_nFkzPXo");
+  })();
+  function sendEmail(params) {
+    let result = validateForm()
+    if(result){
+      let name = document.querySelector('#namesUserEmail').value
+      let email = document.querySelector('#emailFrom').value
+      let text = document.querySelector('#textEmail').value
+      emailjs.send('service_vq3q07b', 'template_xfynf6j', {from_name: name, from_email: email, message: text})
+      .then((response) => console.log('response', response))
+    }
+  }
 </script>
